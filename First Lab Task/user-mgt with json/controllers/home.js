@@ -1,4 +1,5 @@
 const express 	= require('express');
+const fs			= require('fs');
 const router 	= express.Router();
 
 router.get('/', (req, res)=>{
@@ -12,13 +13,19 @@ router.get('/', (req, res)=>{
 
 
 router.get('/userlist', (req, res)=>{
+	var data=fs.readFileSync('./controllers/userlist.json', 'utf8');
+	var userlist=JSON.parse(data);
+	var list = [];
 
+	userlist.forEach(function(user){
+		list.push([user.id,user.username,user.email,user.password]);
+	});
 	if(req.cookies['uname'] != null){
-		res.render('home/userlist', {users: req.session.userlist});		
+		res.render('home/userlist', {users: list});		
 	}else{
 		res.redirect('/login');
 	}
-})
+});
 
 module.exports = router;
 

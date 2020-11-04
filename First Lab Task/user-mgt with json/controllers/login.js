@@ -9,7 +9,7 @@ router.get('/', (req, res)=>{
 router.post('/', (req, res)=>{
 	var data=fs.readFileSync('./controllers/userlist.json', 'utf8');
 	var userlist=JSON.parse(data);
-	req.session.uid = '4';
+	req.session.uid = '3';
 	var loggedin = false;
 
 	userlist.forEach(function(user){
