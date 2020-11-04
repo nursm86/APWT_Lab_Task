@@ -114,7 +114,13 @@ router.post('/edit/:id', (req, res)=>{
 router.get('/delete/:id', (req, res)=>{
 	
 	if(req.cookies['uname'] != null){
-		var userlist = req.session.userlist;
+		var data=fs.readFileSync('./controllers/userlist.json', 'utf8');
+		var list=JSON.parse(data);
+		var userlist = [];
+		list.forEach(function(user){
+			userlist.push([user.id,user.username,user.email,user.password]);
+		});
+
 		var deleteUser;
 		userlist.forEach(function(user,index){
 			if(req.params.id == user[0]){
@@ -134,15 +140,29 @@ router.get('/delete/:id', (req, res)=>{
 router.post('/delete/:id', (req, res)=>{
 	
 	if(req.cookies['uname'] != null){
-		var userlist = req.session.userlist;
-		var deleteUser;
-		userlist.forEach(function(user,index){
-			if(req.params.id == user[0]){
-				deleteUser = user;
+		var data=fs.readFileSync('./controllers/userlist.json', 'utf8');
+		var list=JSON.parse(data);
+		var userlist = [];
+		list.forEach(function(user){
+			userlist.push([user.id,user.username,user.email,user.password]);
+		});
+		var userobj = [];
+		userlist.forEach(function(user){
+			if(req.params.id != user[0]){
+				userobj.push({
+					id : user[0],
+					username : user[1],
+					email : user[2],
+					password : user[3]
+				});
 			}
 		});
-		var newlist = userlist.filter(function(value){ return value != deleteUser;});
-		req.session.userlist = newlist;
+		fs.writeFile("./controllers/userlist.json", JSON.stringify(userobj, null, 4), (err) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+		});
 		res.redirect('/home/userlist');
 	}else{
 		res.redirect('/login');
