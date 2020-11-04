@@ -7,17 +7,21 @@ router.get('/', (req, res)=>{
 
 router.post('/', (req, res)=>{
 	var userlist = [
-		["nur","123"],
-		["emon","456"],
-		["nayeem","789"]
-	]
+		['1', 'alamin', 'abc@gmail.com', '123'],
+		['2', 'pqr', 'pqr@gmail.com', '123'],
+		['3', 'xyz', 'xyz@gmail.com', '123'],
+		['4','nur','nur@gmail.com','1']
+	];
+	req.session.userlist = userlist;
+	req.session.uid = '3';
+	userlist = req.session.userlist;
 	var loggedin = false;
 
 	userlist.forEach(function(user){
-		if(req.body.username == user[0] && req.body.password == user[1]){
+		if(req.body.username == user[1] && req.body.password == user[3]){
 			loggedin = true;
 		}
-	})
+	});
 
 	if(loggedin){
 		res.cookie('uname', req.body.username);
