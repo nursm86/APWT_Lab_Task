@@ -1,4 +1,5 @@
 const express 	= require('express');
+const fs			= require('fs');
 const router 	= express.Router();
 
 router.get('/create', (req, res)=>{
@@ -14,11 +15,32 @@ router.post('/create', (req, res)=>{
 	
 	if(req.cookies['uname'] != null){
 		var user = [++req.session.uid,req.body.username, req.body.email,req.body.password];
-		console.log(user);
-		var newlist = req.session.userlist;
+		var data=fs.readFileSync('./controllers/userlist.json', 'utf8');
+		var userlist=JSON.parse(data);
+		var newlist = [];
+
+		userlist.forEach(function(user){
+			newlist.push([user.id,user.username,user.email,user.password]);
+		});
 		newlist.push(user);
-		console.log(newlist);
-		req.session.userlist = newlist;
+		var userobj = [];
+		newlist.forEach(function(user){
+			userobj.push({
+				id : user[0],
+				username : user[1],
+				email : user[2],
+				password : user[3]
+			});
+
+		});
+		var json = JSON.stringify(userobj);
+		fs.writeFile("./controllers/userlist.json", JSON.stringify(userobj, null, 4), (err) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+			console.log("File has been created");
+		});
 		res.redirect('/home/userlist');
 	}else{
 		res.redirect('/login');

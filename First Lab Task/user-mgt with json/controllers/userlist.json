@@ -1,20 +1,32 @@
 [
-	{
-		"id" : "1",
-		"username" : "alamin",
-		"email" : "alamin@gmail.com",
-		"password" : "123"
-	},
-	{
-		"id" : "2",
-		"username" : "nur",
-		"email" : "nur@gmail.com",
-		"password" : "1"
-	},
-	{
-		"id" : "3",
-		"username" : "xyz",
-		"email" : "xyz@gmail.com",
-		"password" : "123"
-	}
+    {
+        "id": "1",
+        "username": "alamin",
+        "email": "alamin@gmail.com",
+        "password": "123"
+    },
+    {
+        "id": "2",
+        "username": "nur",
+        "email": "nur@gmail.com",
+        "password": "1"
+    },
+    {
+        "id": "3",
+        "username": "xyz",
+        "email": "xyz@gmail.com",
+        "password": "123"
+    },
+    {
+        "id": 4,
+        "username": "nur1",
+        "email": "lucifersm786@gmail.com",
+        "password": "1"
+    },
+    {
+        "id": 4,
+        "username": "nur2",
+        "email": "lucifersm786@gmail.com",
+        "password": "2"
+    }
 ]
