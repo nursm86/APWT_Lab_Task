@@ -33,13 +33,11 @@ router.post('/create', (req, res)=>{
 			});
 
 		});
-		var json = JSON.stringify(userobj);
 		fs.writeFile("./controllers/userlist.json", JSON.stringify(userobj, null, 4), (err) => {
 			if (err) {
 				console.error(err);
 				return;
 			}
-			console.log("File has been created");
 		});
 		res.redirect('/home/userlist');
 	}else{
@@ -52,7 +50,13 @@ router.get('/edit/:id', (req, res)=>{
 	//res.send(req.params.id + "<br>"+ req.params.name);
 	
 	if(req.cookies['uname'] != null){
-		var userlist = req.session.userlist;
+		var data=fs.readFileSync('./controllers/userlist.json', 'utf8');
+		var list=JSON.parse(data);
+		var userlist = [];
+		list.forEach(function(user){
+			userlist.push([user.id,user.username,user.email,user.password]);
+		});
+
 		var editUser;
 		userlist.forEach(function(user,index){
 			if(req.params.id == user[0]){
@@ -72,17 +76,35 @@ router.get('/edit/:id', (req, res)=>{
 router.post('/edit/:id', (req, res)=>{
 	
 	if(req.cookies['uname'] != null){
-		var userlist = req.session.userlist;
+		var data=fs.readFileSync('./controllers/userlist.json', 'utf8');
+		var list=JSON.parse(data);
+		var userlist = [];
+		list.forEach(function(user){
+			userlist.push([user.id,user.username,user.email,user.password]);
+		});
 		userlist.forEach(function(user,index){
 			if(req.params.id == user[0]){
 				userlist[index][1] = req.body.username;
 				userlist[index][2] = req.body.email;
-				console.log(req.body.email);
 				userlist[index][3] = req.body.password;
 			}
 		});
-		req.session.userlist = userlist;
-		console.log(userlist);
+		var userobj = [];
+		userlist.forEach(function(user){
+			userobj.push({
+				id : user[0],
+				username : user[1],
+				email : user[2],
+				password : user[3]
+			});
+
+		});
+		fs.writeFile("./controllers/userlist.json", JSON.stringify(userobj, null, 4), (err) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+		});
 		res.redirect('/home/userlist');
 	}else{
 		res.redirect('/login');
