@@ -55,10 +55,12 @@ router.post('/edit/:id', (req, res)=>{
 			if(req.params.id == user[0]){
 				userlist[index][1] = req.body.username;
 				userlist[index][2] = req.body.email;
+				console.log(req.body.email);
 				userlist[index][3] = req.body.password;
 			}
 		});
 		req.session.userlist = userlist;
+		console.log(userlist);
 		res.redirect('/home/userlist');
 	}else{
 		res.redirect('/login');
@@ -68,8 +70,18 @@ router.post('/edit/:id', (req, res)=>{
 router.get('/delete/:id', (req, res)=>{
 	
 	if(req.cookies['uname'] != null){
-		var user = {username: 'alamin', password: '123', email: 'email@gmail.com'};
-		res.render('user/delete', user);
+		var userlist = req.session.userlist;
+		var deleteUser;
+		userlist.forEach(function(user,index){
+			if(req.params.id == user[0]){
+				deleteUser = {
+					username : user[1],
+					email : user[2],
+					password : user[3]
+				};
+			}
+		});
+		res.render('user/delete', deleteUser);
 	}else{
 		res.redirect('/login');
 	}
@@ -78,7 +90,15 @@ router.get('/delete/:id', (req, res)=>{
 router.post('/delete/:id', (req, res)=>{
 	
 	if(req.cookies['uname'] != null){
-		//res.send('done!');
+		var userlist = req.session.userlist;
+		var deleteUser;
+		userlist.forEach(function(user,index){
+			if(req.params.id == user[0]){
+				deleteUser = user;
+			}
+		});
+		var newlist = userlist.filter(function(value){ return value != deleteUser;});
+		req.session.userlist = newlist;
 		res.redirect('/home/userlist');
 	}else{
 		res.redirect('/login');
