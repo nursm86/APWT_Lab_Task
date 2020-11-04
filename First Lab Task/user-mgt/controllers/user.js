@@ -34,7 +34,11 @@ router.get('/edit/:id', (req, res)=>{
 		var editUser;
 		userlist.forEach(function(user,index){
 			if(req.params.id == user[0]){
-				editUser = user;
+				editUser = {
+					username : user[1],
+					email : user[2],
+					password : user[3]
+				};
 			}
 		});
 		res.render('user/edit', editUser);
