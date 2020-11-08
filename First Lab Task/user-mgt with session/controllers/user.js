@@ -14,10 +14,8 @@ router.post('/create', (req, res)=>{
 	
 	if(req.cookies['uname'] != null){
 		var user = [++req.session.uid,req.body.username, req.body.email,req.body.password];
-		console.log(user);
 		var newlist = req.session.userlist;
 		newlist.push(user);
-		console.log(newlist);
 		req.session.userlist = newlist;
 		res.redirect('/home/userlist');
 	}else{

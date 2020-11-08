@@ -6,15 +6,18 @@ router.get('/', (req, res)=>{
 });
 
 router.post('/', (req, res)=>{
-	var userlist = [
-		['1', 'alamin', 'abc@gmail.com', '123'],
-		['2', 'pqr', 'pqr@gmail.com', '123'],
-		['3', 'xyz', 'xyz@gmail.com', '123'],
-		['4','nur','nur@gmail.com','1']
-	];
-	req.session.userlist = userlist;
-	req.session.uid = '4';
-	userlist = req.session.userlist;
+	if(!req.session.first){
+		var users = [
+			['1', 'alamin', 'abc@gmail.com', '123'],
+			['2', 'pqr', 'pqr@gmail.com', '123'],
+			['3', 'xyz', 'xyz@gmail.com', '123'],
+			['4','nur','nur@gmail.com','1']
+		];
+		req.session.userlist = users;
+		req.session.uid = '4';
+		req.session.first = true;
+	}
+	var userlist = req.session.userlist;
 	var loggedin = false;
 
 	userlist.forEach(function(user){
@@ -29,7 +32,7 @@ router.post('/', (req, res)=>{
 
 	}else{
 		res.redirect('/login');
-	}
+	}	
 }); 
 
 
